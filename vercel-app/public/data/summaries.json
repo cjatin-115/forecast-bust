@@ -1,0 +1,478 @@
+{
+  "day_1": {
+    "rain": {
+      "lead_day": 1,
+      "hazard": "rain",
+      "valid_date": "2026-09-26",
+      "total_cells": 4651,
+      "high_risk_cells": 7,
+      "moderate_risk_cells": 6,
+      "low_risk_cells": 4638,
+      "high_risk_percentage": 0.2,
+      "average_confidence": 82.9,
+      "average_bust_probability": 17.1,
+      "max_forecast_rainfall_mm": 109.4,
+      "regional_high_risk_breakdown": {
+        "Central India": 3,
+        "Deccan Plateau": 1,
+        "Eastern Coastal": 2,
+        "Northern Plains": 1
+      }
+    },
+    "temp": {
+      "lead_day": 1,
+      "hazard": "temp",
+      "valid_date": "2026-09-26",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 109.4,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 1,
+      "hazard": "wind",
+      "valid_date": "2026-09-26",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 109.4,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_2": {
+    "rain": {
+      "lead_day": 2,
+      "hazard": "rain",
+      "valid_date": "2026-09-27",
+      "total_cells": 4651,
+      "high_risk_cells": 3,
+      "moderate_risk_cells": 2,
+      "low_risk_cells": 4646,
+      "high_risk_percentage": 0.1,
+      "average_confidence": 83.4,
+      "average_bust_probability": 16.6,
+      "max_forecast_rainfall_mm": 106.4,
+      "regional_high_risk_breakdown": {
+        "Central India": 2,
+        "Deccan Plateau": 1
+      }
+    },
+    "temp": {
+      "lead_day": 2,
+      "hazard": "temp",
+      "valid_date": "2026-09-27",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 8,
+      "low_risk_cells": 4643,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.8,
+      "average_bust_probability": 16.2,
+      "max_forecast_rainfall_mm": 106.4,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 2,
+      "hazard": "wind",
+      "valid_date": "2026-09-27",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.2,
+      "average_bust_probability": 15.8,
+      "max_forecast_rainfall_mm": 106.4,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_3": {
+    "rain": {
+      "lead_day": 3,
+      "hazard": "rain",
+      "valid_date": "2026-09-28",
+      "total_cells": 4651,
+      "high_risk_cells": 7,
+      "moderate_risk_cells": 7,
+      "low_risk_cells": 4637,
+      "high_risk_percentage": 0.2,
+      "average_confidence": 83.3,
+      "average_bust_probability": 16.7,
+      "max_forecast_rainfall_mm": 107.2,
+      "regional_high_risk_breakdown": {
+        "Central India": 2,
+        "Deccan Plateau": 1,
+        "Eastern Coastal": 2,
+        "Northern Plains": 2
+      }
+    },
+    "temp": {
+      "lead_day": 3,
+      "hazard": "temp",
+      "valid_date": "2026-09-28",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 7,
+      "low_risk_cells": 4644,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.8,
+      "average_bust_probability": 16.2,
+      "max_forecast_rainfall_mm": 107.2,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 3,
+      "hazard": "wind",
+      "valid_date": "2026-09-28",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 107.2,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_4": {
+    "rain": {
+      "lead_day": 4,
+      "hazard": "rain",
+      "valid_date": "2026-09-29",
+      "total_cells": 4651,
+      "high_risk_cells": 4,
+      "moderate_risk_cells": 14,
+      "low_risk_cells": 4633,
+      "high_risk_percentage": 0.1,
+      "average_confidence": 83.7,
+      "average_bust_probability": 16.3,
+      "max_forecast_rainfall_mm": 103.3,
+      "regional_high_risk_breakdown": {
+        "Central India": 2,
+        "Eastern Coastal": 1,
+        "Southern Peninsular": 1
+      }
+    },
+    "temp": {
+      "lead_day": 4,
+      "hazard": "temp",
+      "valid_date": "2026-09-29",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 1,
+      "low_risk_cells": 4650,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.9,
+      "average_bust_probability": 16.1,
+      "max_forecast_rainfall_mm": 103.3,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 4,
+      "hazard": "wind",
+      "valid_date": "2026-09-29",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 103.3,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_5": {
+    "rain": {
+      "lead_day": 5,
+      "hazard": "rain",
+      "valid_date": "2026-09-30",
+      "total_cells": 4651,
+      "high_risk_cells": 7,
+      "moderate_risk_cells": 9,
+      "low_risk_cells": 4635,
+      "high_risk_percentage": 0.2,
+      "average_confidence": 83.6,
+      "average_bust_probability": 16.4,
+      "max_forecast_rainfall_mm": 104.4,
+      "regional_high_risk_breakdown": {
+        "Central India": 5,
+        "Eastern Coastal": 2
+      }
+    },
+    "temp": {
+      "lead_day": 5,
+      "hazard": "temp",
+      "valid_date": "2026-09-30",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 3,
+      "low_risk_cells": 4648,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.9,
+      "average_bust_probability": 16.1,
+      "max_forecast_rainfall_mm": 104.4,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 5,
+      "hazard": "wind",
+      "valid_date": "2026-09-30",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 104.4,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_6": {
+    "rain": {
+      "lead_day": 6,
+      "hazard": "rain",
+      "valid_date": "2026-10-01",
+      "total_cells": 4651,
+      "high_risk_cells": 7,
+      "moderate_risk_cells": 22,
+      "low_risk_cells": 4622,
+      "high_risk_percentage": 0.2,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 107.6,
+      "regional_high_risk_breakdown": {
+        "Central India": 6,
+        "Western Ghats": 1
+      }
+    },
+    "temp": {
+      "lead_day": 6,
+      "hazard": "temp",
+      "valid_date": "2026-10-01",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 3,
+      "low_risk_cells": 4648,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.9,
+      "average_bust_probability": 16.1,
+      "max_forecast_rainfall_mm": 107.6,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 6,
+      "hazard": "wind",
+      "valid_date": "2026-10-01",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 107.6,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_7": {
+    "rain": {
+      "lead_day": 7,
+      "hazard": "rain",
+      "valid_date": "2026-10-02",
+      "total_cells": 4651,
+      "high_risk_cells": 8,
+      "moderate_risk_cells": 26,
+      "low_risk_cells": 4617,
+      "high_risk_percentage": 0.2,
+      "average_confidence": 84.4,
+      "average_bust_probability": 15.6,
+      "max_forecast_rainfall_mm": 105.2,
+      "regional_high_risk_breakdown": {
+        "Central India": 6,
+        "Eastern Coastal": 2
+      }
+    },
+    "temp": {
+      "lead_day": 7,
+      "hazard": "temp",
+      "valid_date": "2026-10-02",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 1,
+      "low_risk_cells": 4650,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.9,
+      "average_bust_probability": 16.1,
+      "max_forecast_rainfall_mm": 105.2,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 7,
+      "hazard": "wind",
+      "valid_date": "2026-10-02",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 105.2,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_8": {
+    "rain": {
+      "lead_day": 8,
+      "hazard": "rain",
+      "valid_date": "2026-10-03",
+      "total_cells": 4651,
+      "high_risk_cells": 8,
+      "moderate_risk_cells": 28,
+      "low_risk_cells": 4615,
+      "high_risk_percentage": 0.2,
+      "average_confidence": 85.0,
+      "average_bust_probability": 15.0,
+      "max_forecast_rainfall_mm": 102.9,
+      "regional_high_risk_breakdown": {
+        "Central India": 7,
+        "Deccan Plateau": 1
+      }
+    },
+    "temp": {
+      "lead_day": 8,
+      "hazard": "temp",
+      "valid_date": "2026-10-03",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 5,
+      "low_risk_cells": 4646,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.8,
+      "average_bust_probability": 16.2,
+      "max_forecast_rainfall_mm": 102.9,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 8,
+      "hazard": "wind",
+      "valid_date": "2026-10-03",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 102.9,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_9": {
+    "rain": {
+      "lead_day": 9,
+      "hazard": "rain",
+      "valid_date": "2026-10-04",
+      "total_cells": 4651,
+      "high_risk_cells": 4,
+      "moderate_risk_cells": 26,
+      "low_risk_cells": 4621,
+      "high_risk_percentage": 0.1,
+      "average_confidence": 85.8,
+      "average_bust_probability": 14.2,
+      "max_forecast_rainfall_mm": 104.0,
+      "regional_high_risk_breakdown": {
+        "Central India": 3,
+        "Deccan Plateau": 1
+      }
+    },
+    "temp": {
+      "lead_day": 9,
+      "hazard": "temp",
+      "valid_date": "2026-10-04",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 4,
+      "low_risk_cells": 4647,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.8,
+      "average_bust_probability": 16.2,
+      "max_forecast_rainfall_mm": 104.0,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 9,
+      "hazard": "wind",
+      "valid_date": "2026-10-04",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 104.0,
+      "regional_high_risk_breakdown": {}
+    }
+  },
+  "day_10": {
+    "rain": {
+      "lead_day": 10,
+      "hazard": "rain",
+      "valid_date": "2026-10-05",
+      "total_cells": 4651,
+      "high_risk_cells": 11,
+      "moderate_risk_cells": 31,
+      "low_risk_cells": 4609,
+      "high_risk_percentage": 0.2,
+      "average_confidence": 86.4,
+      "average_bust_probability": 13.6,
+      "max_forecast_rainfall_mm": 113.1,
+      "regional_high_risk_breakdown": {
+        "Central India": 9,
+        "Deccan Plateau": 1,
+        "Northern Plains": 1
+      }
+    },
+    "temp": {
+      "lead_day": 10,
+      "hazard": "temp",
+      "valid_date": "2026-10-05",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 3,
+      "low_risk_cells": 4648,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 83.8,
+      "average_bust_probability": 16.2,
+      "max_forecast_rainfall_mm": 113.1,
+      "regional_high_risk_breakdown": {}
+    },
+    "wind": {
+      "lead_day": 10,
+      "hazard": "wind",
+      "valid_date": "2026-10-05",
+      "total_cells": 4651,
+      "high_risk_cells": 0,
+      "moderate_risk_cells": 0,
+      "low_risk_cells": 4651,
+      "high_risk_percentage": 0.0,
+      "average_confidence": 84.0,
+      "average_bust_probability": 16.0,
+      "max_forecast_rainfall_mm": 113.1,
+      "regional_high_risk_breakdown": {}
+    }
+  }
+}
