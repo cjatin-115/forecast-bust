@@ -8,8 +8,6 @@ import SearchCommand from "./components/SearchCommand";
 import VerificationModal from "./components/VerificationModal";
 import { getForecastData, getDaySummary } from "./services/staticDataService";
 
-const TOTAL_INDIA_GRID_CELLS = 4651;
-
 export default function App() {
   const [leadDay, setLeadDay] = useState(1);
   const [hazard, setHazard] = useState("rain"); // "rain" | "temp" | "wind"
@@ -70,16 +68,17 @@ export default function App() {
   }, [leadDay, hazard]);
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans text-slate-800 flex flex-col">
-      {/* HEADER */}
+    <div className="min-h-screen bg-slate-100/80 font-sans text-slate-800 flex flex-col antialiased">
+      {/* HEADER WITH EXPANDED SEARCH & MANUAL FETCH DATA BUTTON */}
       <Header
         onOpenVerification={() => setShowVerificationModal(true)}
         onOpenSearch={() => setShowSearchModal(true)}
         forecastStart={forecast?.forecast_start}
+        onFetchData={() => loadForecast(leadDay, hazard)}
       />
 
-      {/* MAIN CONTAINER */}
-      <main className="mx-auto max-w-[1600px] w-full space-y-5 px-6 py-6 flex-1">
+      {/* MAIN CONTAINER WITH GENEROUS BREATHING SPACE */}
+      <main className="mx-auto max-w-[1600px] w-full space-y-7 px-6 lg:px-8 py-8 flex-1">
         {/* TOP KPI STAT CARDS */}
         <StatCards summary={summary} leadDay={leadDay} hazard={hazard} />
 
@@ -95,18 +94,16 @@ export default function App() {
           setRiskFilter={setRiskFilter}
           regionFilter={regionFilter}
           setRegionFilter={setRegionFilter}
-          mapTheme={mapTheme}
-          setMapTheme={setMapTheme}
           forecastStart={forecast?.forecast_start}
         />
 
         {/* ERROR NOTIFICATION */}
         {error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-medium text-red-700 shadow-xs flex items-center justify-between">
-            <span>❌ {error}</span>
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-xs font-medium text-red-700 shadow-xs flex items-center justify-between">
+            <span>⚠️ {error}</span>
             <button
-              onClick={() => loadForecast(leadDay)}
-              className="px-3 py-1 bg-red-600 text-white rounded-lg font-bold text-xs hover:bg-red-700 cursor-pointer"
+              onClick={() => loadForecast(leadDay, hazard)}
+              className="px-3.5 py-1.5 bg-red-600 text-white rounded-xl font-bold text-xs hover:bg-red-700 cursor-pointer shadow-2xs transition-all"
             >
               Retry
             </button>
@@ -114,9 +111,9 @@ export default function App() {
         )}
 
         {/* MAIN DASHBOARD CONTENT GRID */}
-        <section className="grid gap-5 lg:grid-cols-[1fr_360px]">
-          {/* MAP DISPLAY CONTAINER */}
-          <div className="relative overflow-hidden rounded-2xl bg-white shadow-xs border border-slate-200 min-h-[650px]">
+        <section className="grid gap-7 lg:grid-cols-12 items-start">
+          {/* MAP DISPLAY CONTAINER (8 COLS ON DESKTOP) */}
+          <div className="lg:col-span-8 relative overflow-hidden rounded-2xl bg-white shadow-xs border border-slate-200 min-h-[650px]">
             <div className="h-[650px] w-full min-h-[650px]">
               {loading ? (
                 <div className="flex h-full min-h-[650px] items-center justify-center bg-slate-900/5 backdrop-blur-xs">
@@ -137,70 +134,45 @@ export default function App() {
                   riskFilter={riskFilter}
                   regionFilter={regionFilter}
                   mapTheme={mapTheme}
+                  setMapTheme={setMapTheme}
                 />
               )}
             </div>
           </div>
 
-          {/* DRILLDOWN SIDE PANEL */}
-          <div className="space-y-5">
+          {/* DRILLDOWN SIDE PANEL (4 COLS ON DESKTOP) */}
+          <div className="lg:col-span-4 space-y-6">
             <GridInfoPanel
               cell={selectedCell}
               leadDay={leadDay}
               validDate={forecast?.valid_date}
               hazard={hazard}
             />
-
-            {/* DOMAIN SUMMARY CARD */}
-            <div className="rounded-2xl bg-white p-5 shadow-xs border border-slate-200 space-y-3">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Operational Summary • Day {leadDay}
-              </p>
-              <h2 className="text-base font-bold text-slate-900">
-                Valid Date: {forecast?.valid_date || "2026-09-24"}
-              </h2>
-
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500">Total Grid Cells</span>
-                  <span className="font-semibold text-slate-900">{TOTAL_INDIA_GRID_CELLS}</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500">Spatial Resolution</span>
-                  <span className="font-semibold text-slate-800">0.25° (~27 km)</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500">Data Feed</span>
-                  <span className="font-semibold text-emerald-600">Vercel Edge Static Engine</span>
-                </div>
-                <div className="flex justify-between py-1">
-                  <span className="text-slate-500">Mean Domain Confidence</span>
-                  <span className="font-semibold text-emerald-600">{summary?.average_confidence ? `${summary.average_confidence}%` : "Calculated"}</span>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
       </main>
 
       {/* FOOTER */}
-      <footer className="border-t border-slate-200 bg-white py-4 mt-8">
-        <div className="mx-auto max-w-[1600px] px-6 text-center text-xs text-slate-400">
-          Forecast Guard AI • Operational Reliability Layer • Problem Statement 26079 • Deployed directly on Vercel
-        </div>
+      <footer className="border-t border-slate-200 bg-white py-5 text-center text-xs text-slate-500 font-medium mt-8">
+        <p>
+          Forecast Guard AI — PS 26079 Operational Reliability Layer (ECMWF IFS 0.25° Grid)
+        </p>
       </footer>
 
-      {/* MODALS */}
-      <VerificationModal
-        isOpen={showVerificationModal}
-        onClose={() => setShowVerificationModal(false)}
-      />
-
+      {/* SEARCH COMMAND DIALOG */}
       <SearchCommand
         isOpen={showSearchModal}
         onClose={() => setShowSearchModal(false)}
         cells={cells}
-        onSelectCell={setSelectedCell}
+        onSelectCell={(cell) => {
+          setSelectedCell(cell);
+        }}
+      />
+
+      {/* VERIFICATION REPORT MODAL */}
+      <VerificationModal
+        isOpen={showVerificationModal}
+        onClose={() => setShowVerificationModal(false)}
       />
     </div>
   );

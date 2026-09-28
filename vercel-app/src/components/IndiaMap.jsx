@@ -3,6 +3,8 @@ import L from "leaflet";
 import { GeoJSON, MapContainer, TileLayer, useMap } from "react-leaflet";
 import MapLegend from "./MapLegend";
 import { getGeoJSON, getIndiaBoundary } from "../services/staticDataService";
+import { cellMatchesRegion, getRegionBounds } from "../services/regionUtils";
+import { Satellite, Globe } from "lucide-react";
 
 function getRiskColor(prob) {
   const p = Number(prob ?? 0);
@@ -40,22 +42,68 @@ function getWindColor(speed) {
   return "#115e59";
 }
 
-function MapBoundsController({ geoJson }) {
+// Controller to handle bounds fit, region zoom-in, and cell flyTo
+function MapController({ geoJson, cells, selectedCell, regionFilter }) {
   const map = useMap();
+  const initialFitDone = useRef(false);
 
+  // Initial map center fit
   useEffect(() => {
-    if (!geoJson) return;
+    if (!geoJson || initialFitDone.current) return;
     try {
       const layer = L.geoJSON(geoJson);
       const bounds = layer.getBounds();
       if (bounds.isValid()) {
         map.fitBounds(bounds, { padding: [18, 18], maxZoom: 5.2 });
+        initialFitDone.current = true;
         requestAnimationFrame(() => map.invalidateSize());
       }
     } catch (e) {
       console.warn("Bounds calculation warning:", e);
     }
   }, [geoJson, map]);
+
+  // Zoom into Selected Region
+  useEffect(() => {
+    if (!regionFilter || regionFilter === "all") {
+      if (initialFitDone.current && !selectedCell && geoJson) {
+        try {
+          const layer = L.geoJSON(geoJson);
+          const bounds = layer.getBounds();
+          if (bounds.isValid()) map.flyToBounds(bounds, { padding: [18, 18], duration: 1.0 });
+        } catch (e) {}
+      }
+      return;
+    }
+
+    const regionBounds = getRegionBounds(cells, regionFilter);
+    if (regionBounds) {
+      try {
+        map.flyToBounds(regionBounds, {
+          padding: [30, 30],
+          maxZoom: 6.8,
+          duration: 1.2,
+        });
+      } catch (e) {
+        console.warn("Region flyToBounds error:", e);
+      }
+    }
+  }, [regionFilter, cells, geoJson, map, selectedCell]);
+
+  // FlyTo Selected Grid Cell
+  useEffect(() => {
+    if (!selectedCell?.latitude || !selectedCell?.longitude) return;
+    try {
+      const lat = Number(selectedCell.latitude);
+      const lon = Number(selectedCell.longitude);
+      map.flyTo([lat, lon], 7.5, {
+        duration: 1.2,
+        easeLinearity: 0.25,
+      });
+    } catch (e) {
+      console.warn("FlyTo cell warning:", e);
+    }
+  }, [selectedCell, map]);
 
   return null;
 }
@@ -69,11 +117,19 @@ export default function IndiaMap({
   riskFilter = "all",
   regionFilter = "all",
   mapTheme = "satellite",
+  setMapTheme,
 }) {
   const [gridGeoJson, setGridGeoJson] = useState(null);
   const [indiaBoundary, setIndiaBoundary] = useState(null);
   const [fetchError, setFetchError] = useState(null);
   const geoJsonRef = useRef(null);
+
+  // Normalize active theme to either "satellite" or "standard"
+  const activeTheme = mapTheme === "standard" ? "standard" : "satellite";
+
+  const toggleTheme = (newTheme) => {
+    if (setMapTheme) setMapTheme(newTheme);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -101,6 +157,7 @@ export default function IndiaMap({
     return new Map(cells.map((c) => [String(c.cell_id), c]));
   }, [cells]);
 
+  // Translucent Grid Styling so map underneath is visible
   const styleFeature = (feature) => {
     const cellId = feature?.properties?.cell_id;
     const cell = cellDataMap.get(String(cellId));
@@ -108,25 +165,26 @@ export default function IndiaMap({
 
     if (!cell) {
       return {
-        color: "#cbd5e1",
+        color: "rgba(255, 255, 255, 0.3)",
         weight: 0.3,
         fillColor: "#e2e8f0",
-        fillOpacity: 0.3,
+        fillOpacity: 0.15,
       };
     }
 
-    // Apply Filter Dimming
-    let opacity = mapTheme === "satellite" ? 0.8 : 0.75;
-    if (riskFilter === "high_risk" && !["high", "very_high"].includes(cell.risk_level)) {
-      opacity = 0.1;
-    } else if (riskFilter === "moderate_plus" && !["moderate", "high", "very_high"].includes(cell.risk_level)) {
-      opacity = 0.1;
-    } else if (riskFilter === "very_high" && cell.risk_level !== "very_high") {
-      opacity = 0.1;
-    }
+    // Region Filter Matching
+    const matchesReg = cellMatchesRegion(cell, regionFilter);
 
-    if (regionFilter !== "all" && cell.region !== regionFilter) {
-      opacity = 0.1;
+    // Filter dimming
+    let baseOpacity = activeTheme === "satellite" ? 0.35 : 0.40;
+    if (!matchesReg) {
+      baseOpacity = 0.05;
+    } else if (riskFilter === "high_risk" && !["high", "very_high"].includes(cell.risk_level)) {
+      baseOpacity = 0.05;
+    } else if (riskFilter === "moderate_plus" && !["moderate", "high", "very_high"].includes(cell.risk_level)) {
+      baseOpacity = 0.05;
+    } else if (riskFilter === "very_high" && cell.risk_level !== "very_high") {
+      baseOpacity = 0.05;
     }
 
     let fillColor;
@@ -139,10 +197,10 @@ export default function IndiaMap({
     }
 
     return {
-      color: isSelected ? "#ffffff" : mapTheme === "satellite" ? "#475569" : "#64748b",
-      weight: isSelected ? 2.5 : 0.4,
+      color: isSelected ? "#3b82f6" : activeTheme === "satellite" ? "rgba(255, 255, 255, 0.4)" : "rgba(100, 116, 139, 0.4)",
+      weight: isSelected ? 2.5 : 0.5,
       fillColor: fillColor,
-      fillOpacity: opacity,
+      fillOpacity: isSelected ? 0.80 : baseOpacity,
     };
   };
 
@@ -194,7 +252,7 @@ export default function IndiaMap({
       },
       mouseover: (e) => {
         const l = e.target;
-        l.setStyle({ weight: 2.2, color: "#ffffff" });
+        l.setStyle({ weight: 2.0, color: "#ffffff", fillOpacity: 0.70 });
       },
       mouseout: (e) => {
         const l = e.target;
@@ -204,12 +262,40 @@ export default function IndiaMap({
   };
 
   return (
-    <div className="relative h-full w-full min-h-[650px] bg-slate-900 rounded-2xl overflow-hidden">
+    <div className="relative h-full w-full min-h-[650px] bg-slate-950 rounded-2xl overflow-hidden shadow-inner border border-slate-800">
       {fetchError && (
-        <div className="absolute top-3 left-3 z-[1000] bg-red-100 border border-red-300 text-red-700 text-xs px-3 py-1.5 rounded-lg shadow">
+        <div className="absolute top-3 left-3 z-10 bg-red-100 border border-red-300 text-red-700 text-xs px-3 py-1.5 rounded-lg shadow">
           Grid Layer Load Warning: {fetchError}
         </div>
       )}
+
+      {/* FLOATING SATELLITE / STANDARD MAP TOGGLE (z-10 ensures sticky header z-1000 stays above) */}
+      <div className="absolute top-3 right-3 z-10 flex items-center gap-1 p-1 bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-slate-200">
+        <button
+          onClick={() => toggleTheme("satellite")}
+          title="Satellite Map (Esri High-Res Imagery)"
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            activeTheme === "satellite"
+              ? "bg-slate-900 text-white shadow-xs"
+              : "text-slate-700 hover:bg-slate-100"
+          }`}
+        >
+          <Satellite className="h-3.5 w-3.5 text-blue-400" />
+          <span>Satellite View</span>
+        </button>
+        <button
+          onClick={() => toggleTheme("standard")}
+          title="Standard OpenStreetMap"
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            activeTheme === "standard"
+              ? "bg-slate-900 text-white shadow-xs"
+              : "text-slate-700 hover:bg-slate-100"
+          }`}
+        >
+          <Globe className="h-3.5 w-3.5 text-emerald-500" />
+          <span>Standard</span>
+        </button>
+      </div>
 
       <MapContainer
         center={[22.5, 79.5]}
@@ -218,43 +304,54 @@ export default function IndiaMap({
         className="h-full w-full min-h-[650px] rounded-2xl z-0"
         style={{ height: "100%", width: "100%", minHeight: "650px" }}
       >
-        {/* SATELLITE VS STANDARD TILE LAYER */}
-        {mapTheme === "satellite" ? (
-          <TileLayer
-            key="satellite-layer"
-            attribution="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-          />
+        {/* TILE LAYERS */}
+        {activeTheme === "satellite" ? (
+          <>
+            <TileLayer
+              key="satellite-layer"
+              attribution="Tiles &copy; Esri &mdash; Source: Esri, USDA, USGS"
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            />
+            <TileLayer
+              key="satellite-labels"
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+            />
+          </>
         ) : (
           <TileLayer
             key="standard-layer"
-            attribution='<a href="https://leafletjs.com/">Leaflet</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
         )}
 
-        {/* 1. GRID GeoJSON LAYER - STABLE KEY PREVENTS UNMOUNTING BLANK SCREEN */}
+        {/* 1. GRID GeoJSON LAYER */}
         {gridGeoJson && (
           <>
             <GeoJSON
               ref={geoJsonRef}
-              key={`grid-${viewMode}-${hazard}-${riskFilter}-${regionFilter}-${mapTheme}-${cells.length}`}
+              key={`grid-${viewMode}-${hazard}-${riskFilter}-${regionFilter}-${activeTheme}-${cells.length}`}
               data={gridGeoJson}
               style={styleFeature}
               onEachFeature={onEachFeature}
             />
-            <MapBoundsController geoJson={gridGeoJson} />
+            <MapController
+              geoJson={gridGeoJson}
+              cells={cells}
+              selectedCell={selectedCell}
+              regionFilter={regionFilter}
+            />
           </>
         )}
 
-        {/* 2. STATE BOUNDARIES OVERLAY - NON-INTERACTIVE */}
+        {/* 2. STATE BOUNDARIES OVERLAY */}
         {indiaBoundary && (
           <GeoJSON
-            key={`boundary-${mapTheme}`}
+            key={`boundary-${activeTheme}`}
             data={indiaBoundary}
             interactive={false}
             style={{
-              color: mapTheme === "satellite" ? "#ffffff" : "#0f172a",
+              color: activeTheme === "satellite" ? "#ffffff" : "#0f172a",
               weight: 1.8,
               fillColor: "transparent",
               fillOpacity: 0,

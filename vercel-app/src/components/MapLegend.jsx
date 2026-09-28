@@ -54,7 +54,7 @@ export default function MapLegend({ viewMode = "risk", hazard = "rain" }) {
   }
 
   return (
-    <div className="absolute bottom-4 left-4 z-[1000] rounded-xl bg-white/95 backdrop-blur p-3.5 shadow-lg border border-slate-200 max-w-[280px]">
+    <div className="absolute bottom-4 left-4 z-10 rounded-xl bg-white/95 backdrop-blur p-3.5 shadow-lg border border-slate-200 max-w-[280px]">
       <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-800">
         {title}
       </p>
