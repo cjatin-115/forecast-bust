@@ -40,25 +40,51 @@ class InferenceEngine:
         self._load_resources()
 
     def _load_resources(self):
-        # Load multi-hazard models
+        # Load multi-hazard models with robust error trapping
         self.models = {}
         for h_key, f_path in [('rain', MODEL_FILE_RAIN), ('temp', MODEL_FILE_TEMP), ('wind', MODEL_FILE_WIND)]:
-            if f_path.exists():
-                bundle = joblib.load(f_path)
-                self.models[h_key] = bundle['calibrated_model']
-            else:
-                bundle = joblib.load(MODEL_FILE_RAIN)
-                self.models[h_key] = bundle['calibrated_model']
+            try:
+                if f_path.exists():
+                    bundle = joblib.load(f_path)
+                    self.models[h_key] = bundle.get('calibrated_model', None)
+            except Exception as e:
+                print(f"Warning loading model {h_key}: {e}")
+                self.models[h_key] = None
 
-        bundle_rain = joblib.load(MODEL_FILE_RAIN)
-        self.feature_columns = bundle_rain['feature_columns']
-        self.model_version = bundle_rain.get('version', '1.2.0')
+        try:
+            bundle_rain = joblib.load(MODEL_FILE_RAIN) if MODEL_FILE_RAIN.exists() else {}
+            self.feature_columns = bundle_rain.get('feature_columns', FEATURE_COLUMNS)
+            self.model_version = bundle_rain.get('version', '1.2.0')
+        except Exception as e:
+            print(f"Warning loading model bundle: {e}")
+            self.feature_columns = FEATURE_COLUMNS
+            self.model_version = '1.2.0'
 
-        self.feature_engineer = FeatureEngineer()
-        self.shap_service = ShapExplainerService(MODEL_FILE_RAIN)
-        self.similar_retriever = SimilarEventsRetriever()
-        self.grid_df = pd.read_csv(GRID_FILE)
-        self.grid_meta = {r['cell_id']: {'region': r['region'], 'state': r['state']} for _, r in self.grid_df.iterrows()}
+        try:
+            self.feature_engineer = FeatureEngineer()
+        except Exception as e:
+            print(f"Warning loading FeatureEngineer: {e}")
+            self.feature_engineer = None
+
+        try:
+            self.shap_service = ShapExplainerService(MODEL_FILE_RAIN)
+        except Exception as e:
+            print(f"Warning loading ShapExplainerService: {e}")
+            self.shap_service = None
+
+        try:
+            self.similar_retriever = SimilarEventsRetriever()
+        except Exception as e:
+            print(f"Warning loading SimilarEventsRetriever: {e}")
+            self.similar_retriever = None
+
+        try:
+            self.grid_df = pd.read_csv(GRID_FILE)
+            self.grid_meta = {r['cell_id']: {'region': r['region'], 'state': r['state']} for _, r in self.grid_df.iterrows()}
+        except Exception as e:
+            print(f"Warning loading GRID_FILE: {e}")
+            self.grid_df = pd.DataFrame()
+            self.grid_meta = {}
 
         self._ensure_operational_predictions()
 
