@@ -83,6 +83,18 @@ def root():
     }
 
 
+@app.get("/health")
+@app.get("/api/health")
+def health_check():
+    return {
+        "status": "healthy",
+        "service": "Forecast Guard API",
+        "version": "1.0.0",
+        "model_loaded": True,
+        "nwp_data_available": NWP_FILE.exists(),
+    }
+
+
 # ==================================================
 # RAW FORECAST & LOCATION
 # ==================================================
