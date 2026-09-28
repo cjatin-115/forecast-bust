@@ -27,9 +27,11 @@ build/
 *.grb
 *.grb2
 
-# Processed heavy temporary data (keep data/grid/ tracked)
+# Processed data
 data/raw/
-data/processed/
+data/processed/*
+!data/processed/operational_predictions.csv
+!data/processed/nwp_grid.csv
 data/imd/
 !data/grid/
 !data/grid/*
